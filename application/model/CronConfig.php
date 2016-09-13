@@ -3,116 +3,70 @@
 namespace Model;
 
 use Parser\Parser;
-use PDO;
 
 class CronConfig {
-    private $environmentId;
-    private $configs = array();
-    private $connection;
-   const PATH = '/www/CronProject1/cron.d/';
 
-    public function __construct( $environmentId, $connection )
-    {
-        $this->environmentId = $environmentId;
-        $this->connection = $connection;
-    }
+    const PATH = '/www/CronProject1/cron.d/';
 
     public function getCurrentConfigList() {
-        $configListQuery = 'SELECT *
-                            FROM CurrentConfig
-                            WHERE envID = :envId';
-        $sth = $this->connection->prepare( $configListQuery );
-        $sth->bindParam( ':envId', $this->environmentId, PDO::PARAM_STR );
-        $sth->execute();
-        $this->configs = $sth->fetchAll( PDO::FETCH_ASSOC );
-        return $this->configs;
+        $files = array_diff( scandir( self::PATH ), array( '..', '.' ) );
+        return $files;
     }
 
-    public function getCurrentConfigContent( $args )
+    public function getCurrentConfigContent( $fileName )
     {
-        $filename = $args['configName'] . '.' . $args['configExtension'];
-        $directory = self::PATH . $filename;
+        $directory = self::PATH . $fileName;
         $configContent = Parser::getContent( $directory );
-        $current['configName'] = $filename;
-        $current['configId'] = $args['configId'];
+        $current['configName'] = $fileName;
+        $current['directory'] = $directory;
         $current['configContent'] = $configContent;
         return $current;
     }
 
-    public function getFilePath( $configId ) {
-        $configQuery = 'SELECT configName, configExtension
-                        FROM CurrentConfig
-                        WHERE configId = :confId';
-        $sth = $this->connection->prepare( $configQuery );
-        $sth->bindParam( ':confId', $configId, PDO::PARAM_STR );
-        $sth->execute();
-        $filename = $sth->fetch( PDO::FETCH_ASSOC );
-        return $filename['configName'] . '.' . $filename['configExtension'];
+    public function addRowToFile( $args ) {
+        $row = implode( ' ', $args['cronTiming'] ) . PHP_EOL;
+        file_put_contents( self::PATH . $args['configName'], $row, FILE_APPEND );
     }
 
-    public function addRowToFile( $filePath, $param ) {
-        $row = implode( ' ', $param ) . PHP_EOL;
-        file_put_contents( self::PATH . $filePath, $row, FILE_APPEND );
-    }
+    public function delRowFromFile( $args )
+    {
+        $directory = self::PATH . $args['configName'];
 
-    public function delRowFromFile( $filePath, $rowIndex ) {
-        $directory = self::PATH . $filePath;
-        if ( $rowIndex != '' ) {
+        if ( $args['rowIndex'] != '' ) {
             $file=file( $directory );
+
             for( $i=0;$i<sizeof( $file );$i++ )
-                if( $i==$rowIndex ) unset( $file[$i] );
-            $fp=fopen( $directory,'w' );
-            fputs( $fp,implode( '',$file ) );
-            fclose( $fp );
+                if( $i==$args['rowIndex'] )
+                    unset( $file[$i] );
+
+            file_put_contents( $directory, implode( '', $file ) );
         }
     }
 
-    public function editRowInFile( $filePath, $rowIndex, $cronTiming ) {
-        $directory = self::PATH . $filePath;
-        $row = implode( ' ', $cronTiming ) . PHP_EOL;
+    public function editRowInFile( $args )
+    {
+        $directory = self::PATH . $args['configName'];
+        $row = implode( ' ', $args['cronTiming'] ) . PHP_EOL;
 
-        if ( $rowIndex != '' ) {
+        if ( $args['rowIndex'] != '' ) {
             $file=file( $directory );
+
             for( $i=0;$i<sizeof( $file );$i++ )
-                if( $i==$rowIndex ) $file[$i] = $row;
-            $fp=fopen( $directory,'w' );
-            fputs( $fp,implode( '',$file ) );
-            fclose( $fp );
+                if( $i==$args['rowIndex'] )
+                    $file[$i] = $row;
+
+            file_put_contents( $directory, implode( '', $file ) );
         }
     }
 
-    public function createNewConfig( $filePath, $rowGroup ) {
-        $fileRows = Parser::newFileRows( $filePath, $rowGroup );
+    public function createNewConfig( $filePath, $args )
+    {
+        $fileRows = Parser::newFileRows( $filePath, $args['rowGroup'] );
         $explodeFilePath = explode( '/', $filePath );
         $len = count( $explodeFilePath );
-        $fileNameExt = $explodeFilePath[$len-1];
-        $explodeFileNameExt = explode( '.', $fileNameExt );
-        $fileName = $explodeFileNameExt[0];
-        $fileExt = $explodeFileNameExt[1];
-
-        $queryInsert = 'INSERT
-                        INTO CurrentConfig(configName, configExtension, envId)
-                        VALUES  (:confName, :ext, :id)';
-
-        $sth = $this->connection->prepare( $queryInsert );
-        try {
-            $this->connection->beginTransaction();
-            $sth->bindParam( ':confName', $fileName );
-            $sth->bindParam( ':ext', $fileExt );
-            $sth->bindParam( ':id', $this->environmentId );
-            $resultReplace = $sth->execute();
-            $this->connection->commit();
-        } catch ( \PDOException $e ) {
-            $this->connection->rollback();
-            echo 'Database error: ' . $e->getMessage();
-            die();
-        }
-
-        if( $resultReplace ) {
-            $row = implode( ' ', $fileRows ) . PHP_EOL;
-            file_put_contents( self::PATH . $fileNameExt, $row );
-        }
-
+        $fileName = $explodeFilePath[$len-1];
+        $row = implode( '', $fileRows ) . PHP_EOL;
+        file_put_contents( self::PATH . $fileName, $row );
     }
 
 }

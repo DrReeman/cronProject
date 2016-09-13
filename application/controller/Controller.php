@@ -39,12 +39,9 @@ class Controller {
         );
     }
 
-    public function getCurrentConfigAction( $args )
+    public function getCurrentConfigAction()
     {
-        $cronConfig = new CronConfig(
-            $args['environmentId'],
-            $this->setConnection()
-        );
+        $cronConfig = new CronConfig();
         $currentConfig = $cronConfig->getCurrentConfigList();
         $source = array();
 
@@ -62,21 +59,7 @@ class Controller {
         );
     }
 
-    public function editRowAction( $args )
-    {
-        $cronConfig = new CronConfig (
-            $args['environmentId'],
-            $this->setConnection()
-        );
-        $filePath = $cronConfig->getFilePath(
-            $args['configId']
-        );
-        $cronConfig->editRowInFile(
-            $filePath,
-            $args['rowIndex'],
-            $args['cronTiming']
-        );
-    }
+
 
     public function addFullConfigAction( $args )
     {
@@ -88,50 +71,34 @@ class Controller {
             $args['sourceConfigId']
         );
 
-        echo  $args['environmentId'];
-
-        $cronConfig = new CronConfig(
-            $args['environmentId'],
-            $this->setConnection()
-        );
+        $cronConfig = new CronConfig();
 
         $cronConfig->createNewConfig(
             $filePath,
-            $args['rowGroup']
+            $args
         );
     }
 
     public function addRowConfigAction( $args )
     {
-        $cronConfig = new CronConfig(
-            $args['environmentId'],
-            $this->setConnection()
-        );
-        $filePath = $cronConfig->getFilePath(
-            $args['configId']
-        );
-        $cronConfig->addRowToFile(
-            $filePath,
-            $args['cronTiming']
-        );
-    }
-
-    public function deleteFullConfigAction( $args )
-    {
+        $cronConfig = new CronConfig();
+        $cronConfig->addRowToFile( $args );
     }
 
     public function deleteRowConfigAction( $args )
     {
-        $cronConfig = new CronConfig(
-            $args['environmentId'],
-            $this->setConnection()
-        );
-        $filePath = $cronConfig->getFilePath(
-            $args['configId']
-        );
-        $cronConfig->delRowFromFile(
-            $filePath, $args['rowIndex']
-        );
+        $cronConfig = new CronConfig();
+        $cronConfig->delRowFromFile( $args );
+    }
+
+    public function editRowAction( $args )
+    {
+        $cronConfig = new CronConfig();
+        $cronConfig->editRowInFile( $args );
+    }
+
+    public function deleteFullConfigAction( $args )
+    {
     }
 
     public function killAction( $args )

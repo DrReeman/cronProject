@@ -2,7 +2,7 @@
     <?php foreach($content as $file): ?>
         <h3><?php echo $file['configName']; ?></h3>
         <div class = "fileContent">
-            <input type = "text" id = "fileName" data-config-id = "<?php echo $file['configId']; ?>" hidden = "true" >
+            <input type = "text" id = "fileName" data-config-name = "<?php echo $file['configName']; ?>" hidden = "true" >
             <label><input type = "button" value = "Delete"></input></label>
             <label><input type = "button" value = "Run/Kill"></input></label>
             <label><input type = "button" value = "Save"></input></label>

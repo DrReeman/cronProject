@@ -16,7 +16,7 @@ $(document).ready(function(){
             $('td').bind('click', cellClick);
         };
         var param = {
-            "environmentId":environmentId
+        //    "environmentId":environmentId
 
         };
         sendData(action, param, userFunction);
@@ -35,12 +35,11 @@ $(document).ready(function(){
             alert(reqData);
         };
         var param = {
-            "configId":data.configId,
-            "environmentId":data.environmentId,
+            "configName":data.configName,
             "cronTiming":cronTiming
 
         };
-        if (undefined === data.configId) {
+        if (undefined === data.configName) {
             alert('Файл не определен!');
         } else {
             sendData(action, param, userFunction);
@@ -54,12 +53,11 @@ $(document).ready(function(){
             alert(reqData);
         };
         var param = {
-                "configId":data.configId,
-                "environmentId":data.environmentId,
+                "configName":data.configName,
                 "rowIndex":data.rowIndex
 
         };
-        if (undefined === data.configId) {
+        if (undefined === data.configName) {
             alert('Файл не определен!');
         } else {
             sendData(action, param, userFunction);
@@ -74,13 +72,13 @@ $(document).ready(function(){
             alert(reqData);
         };
         var param = {
-                "configId":data.configId,
-                "environmentId":data.environmentId,
+                "configName":data.configName,
+                //"environmentId":data.environmentId,
                 "rowIndex":data.rowIndex,
                 "cronTiming":cronTiming
 
             };
-        if (undefined === data.configId) {
+        if (undefined === data.configName) {
             alert('Файл не определен!');
         } else {
             sendData(action, param, userFunction);
@@ -88,7 +86,6 @@ $(document).ready(function(){
     }
 
     function addRowGroup() {
-        //var data = getData(this);
         var rowGroup = $.map($('.rowsGroup').filter(":checkbox:checked"),
                     function(el){
                         return $(el).data('rowIndex');
@@ -132,13 +129,13 @@ $(document).ready(function(){
         var rowIndex = $('#'+button.id).data('rowIndex');
         var environmentId = $('#environmentList option:selected').data('id');
         var activeCurrentConfig = $('#accordionCurrent').find("[aria-hidden='false']");
-        var currentConfigId = activeCurrentConfig.find('#fileName').data('configId');
+        var currentConfigName = activeCurrentConfig.find('#fileName').data('configName');
         var activeSourceConfig = $('#accordionSource').find("[aria-hidden='false']");
         var sourceConfigId = activeSourceConfig.find('#fileName').data('configId');
         var object = {
             "rowIndex":rowIndex,
             "environmentId":environmentId,
-            "configId":currentConfigId,
+            "configName":currentConfigName,
             "sourceConfigId":sourceConfigId
         };
         return object;

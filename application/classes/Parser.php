@@ -35,6 +35,9 @@ class Parser {
         foreach ($explodeRow as $index => $rowElement) {
             $newFileContent[$index] = array_combine( self::$keyword, $rowElement );
         }
+        //echo "<pre>";
+        //echo var_dump($newFileContent);
+        //echo "</pre>";
 
         return $newFileContent;
     }
@@ -54,7 +57,7 @@ class Parser {
         ksort( $newFileRows );
 
         return $newFileRows;
-        //echo "<pre>";
+       // echo "<pre>";
         //echo var_dump($newFileRows);
         //echo "</pre>";
     }
