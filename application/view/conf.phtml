@@ -1,0 +1,35 @@
+<div id="accordionCurrent">
+    <?php foreach($content as $file): ?>
+        <h3><?php echo $file['configName']; ?></h3>
+        <div class = "fileContent">
+            <input type = "text" id = "fileName" data-config-id = "<?php echo $file['configId']; ?>" hidden = "true" >
+            <label><input type = "button" value = "Delete"></input></label>
+            <label><input type = "button" value = "Run/Kill"></input></label>
+            <label><input type = "button" value = "Save"></input></label>
+            <label><input type = "button" value = "Save and Run"></input></label>
+            <br>
+            <table>
+                <tr>
+                    <th colspan = "5">Расписание</th>
+                    <th>Владелец</th>
+                    <th>Процесс</th>
+                    <th>Команда</th>
+                    <th>Операции</th>
+                </tr>
+                <?php $n = 0; foreach ($file['configContent'] as $index => $row): ?>
+                    <tr>
+                        <?php foreach ($row as $rowElement): ?>
+                            <td data-type = 'editable'>
+                                <?php echo $rowElement; ?>
+                            </td>
+                        <?php endforeach ?>
+                        <td>
+                            <label><input type = "button" class = "delRowButton" value = "del row" id = "delButton<?php echo $n++; ?>" data-row-index = "<?php echo $index; ?>"></input></label>
+                            <label><input type = "button" class = "changeRowButton" value = "change row" id = "changeButton<?php echo $n++; ?>" data-row-index = "<?php echo $index; ?>"></input></label>
+                        </td>
+                    </tr>
+                <?php endforeach ?>
+            </table>
+        </div>
+    <?php endforeach ?>
+</div>

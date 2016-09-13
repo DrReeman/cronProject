@@ -1,0 +1,83 @@
+body{
+    background-color: antiquewhite;
+}
+
+table {
+    font-family: "Lucida Sans Unicode", "Lucida Grande", Sans-Serif;
+    font-size: 14px;
+    border-collapse: collapse;
+    text-align: center;
+}
+/*td:first-child*/
+th {
+    background: #AFCDE7;
+    color: white;
+    padding: 10px 20px;
+}
+th, td {
+    border-style: solid;
+    border-width: 0 1px 1px 0;
+    border-color: white;
+}
+td {
+    background: #D8E6F3;
+}
+th:first-child, td:first-child {
+    text-align: left;
+}
+
+#search{
+    position: absolute;
+    width: 950px;
+    margin: 10px 20px;
+
+}
+#container{
+    background-color: #FFDEAD;
+    width: 1835px;
+    height: 800px;
+}
+#lots{
+    position: absolute;
+    margin: 80px 20px;
+    width: 950px;
+    height: 600px;
+    background-color: #FFE4B5;
+}
+
+#searchField{
+    width:850px;
+}
+
+
+
+#cronSources {
+    position: absolute;
+    margin: 80px 925px;
+    width: 890px;
+    height: 600px;
+    background-color: #FFE4B5;
+}
+
+#cronConfig {
+    position: absolute;
+    margin: 80px 15px;
+    width: 890px;
+    height: 600px;
+    background-color: #FFE4B5;
+}
+
+#environment {
+    position: absolute;
+    margin: 10px 15px;
+    width: 890px;
+    height: 50px;
+    background-color: #FFE4B5;
+}
+
+#environmentList {
+    width: 890px;
+}
+
+
+
