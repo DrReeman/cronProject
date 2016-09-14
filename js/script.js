@@ -11,6 +11,7 @@ $(document).ready(function(){
                 active: false,
                 collapsible:true
             });
+            $('.saveButton').bind('click', saveFile);
             $('.delRowButton').bind('click', delRow);
             $('.changeRowButton').bind('click', changeRow);
             $('td').bind('click', cellClick);
@@ -21,7 +22,44 @@ $(document).ready(function(){
         };
         sendData(action, param, userFunction);
     });
+function activeCronCommands() {
+    var tableCronCommands = $('#accordionCurrent')
+        .find('[aria-hidden="false"]')
+        .find('.cronCommands');
 
+    var rowsCronCommands = tableCronCommands.children().children('[data-type=tableContent]');
+    var rowsObj = {};
+    for (var i = 0; i < rowsCronCommands.length; i++) {
+        var rowData = [];
+        //var rowIndex = $(rows[i]).children().('[data-type=editable]')
+        var td = $(rowsCronCommands[i]).children('[data-type=editable]');
+        for (var j = 0; j < td.length; j++) {
+            rowData.push($(td[j]).text().trim());
+        }
+        rowsObj[i] = rowData;
+    }
+    return rowsObj;
+}
+
+
+    function activeEnvironVars() {
+
+        var tableEnvironVars = $('#accordionCurrent')
+            .find('[aria-hidden="false"]')
+            .find('.environVars');
+
+        var rowsEnvironVars = tableEnvironVars.children().children();//'[data-type=tableContent]');
+        var rowsObj = {};
+        for (var i = 0; i < rowsEnvironVars.length; i++) {
+            var rowData = [];
+            var td = $(rowsEnvironVars[i]).children();
+            for (var j = 0; j < td.length; j++) {
+                rowData.push($(td[j]).text().trim());
+            }
+            rowsObj[i] = rowData;
+        }
+       return rowsObj;
+    }
 
 
     $('.addFullConfig').bind('click', addRowGroup);
@@ -30,16 +68,21 @@ $(document).ready(function(){
     function addRow() {
         var data = getData(this);
         var cronTiming = getCronTiming(this);
-        var action = 'addRowConfig';
-        var userFunction = function(reqData) {
-            alert(reqData);
+        var action = 'addRow';
+        var userFunction = function(reqData){
+            $('#accordionCurrent')
+                .find('[aria-hidden="false"]')
+                .find('.cronCommands')
+                .append(reqData);
+
+
         };
         var param = {
-            "configName":data.configName,
+            "currentConfigName":data.currentConfigName,
             "cronTiming":cronTiming
 
         };
-        if (undefined === data.configName) {
+        if (undefined === data.currentConfigName) {
             alert('Файл не определен!');
         } else {
             sendData(action, param, userFunction);
@@ -48,16 +91,16 @@ $(document).ready(function(){
 
     function delRow() {
         var data = getData(this);
-        var action = 'deleteRowConfig';
+        var action = 'delRow';
         var userFunction = function(reqData) {
             alert(reqData);
         };
         var param = {
-                "configName":data.configName,
+                "currentConfigName":data.currentConfigName,
                 "rowIndex":data.rowIndex
 
         };
-        if (undefined === data.configName) {
+        if (undefined === data.currentConfigName) {
             alert('Файл не определен!');
         } else {
             sendData(action, param, userFunction);
@@ -72,13 +115,37 @@ $(document).ready(function(){
             alert(reqData);
         };
         var param = {
-                "configName":data.configName,
+                "currentConfigName":data.currentConfigName,
                 //"environmentId":data.environmentId,
                 "rowIndex":data.rowIndex,
                 "cronTiming":cronTiming
 
             };
-        if (undefined === data.configName) {
+        if (undefined === data.currentConfigName) {
+            alert('Файл не определен!');
+        } else {
+            sendData(action, param, userFunction);
+        }
+    }
+
+    function saveFile() {
+
+        var environVarsConfig = activeEnvironVars();
+        var cronCommandsConfig = activeCronCommands();
+        var action = 'saveFile';
+        var userFunction = function(reqData) {
+            alert(reqData);
+        };
+        var activeCurrentConfig = $('#accordionCurrent').find("[aria-hidden='false']");
+        var currentConfigName = activeCurrentConfig.find('#fileName').data('configName');
+        //var data = getData(this);
+        var param = {
+            "currentConfigName":currentConfigName,
+            "environVarsConfig":environVarsConfig,
+            "cronCommandsConfig":cronCommandsConfig
+        };
+
+        if (undefined === currentConfigName) {
             alert('Файл не определен!');
         } else {
             sendData(action, param, userFunction);
@@ -135,7 +202,7 @@ $(document).ready(function(){
         var object = {
             "rowIndex":rowIndex,
             "environmentId":environmentId,
-            "configName":currentConfigName,
+            "currentConfigName":currentConfigName,
             "sourceConfigId":sourceConfigId
         };
         return object;

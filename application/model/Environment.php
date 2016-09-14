@@ -50,13 +50,13 @@ class Environment
     }
 
 
-    public function getFilePath( $sourceConfigId )
+    public function getFilePath( $args )
     {
         $SourceQuery = 'SELECT directory, configName, configExtension
                         FROM SourcesConfig
                         where configId = :confId';
         $sth = $this->connection->prepare( $SourceQuery );
-        $sth->bindParam( ':confId', $sourceConfigId, PDO::PARAM_STR );
+        $sth->bindParam( ':confId', $args['sourceConfigId'], PDO::PARAM_STR );
         $sth->execute();
         $filename = $sth->fetch( PDO::FETCH_ASSOC );
         return $filename['directory'] . $filename['configName'] . '.' . $filename['configExtension'];

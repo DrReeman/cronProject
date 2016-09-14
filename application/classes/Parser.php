@@ -23,22 +23,40 @@ class Parser {
 
     );
 
+    static function delEmpty($arr) {
+        foreach ($arr as $str) {
+            $newArr[] = rtrim($str);
+        }
+
+        $newArr = array_diff($newArr, array(''));
+        return $newArr;
+    }
 
     static function getContent( $directory ) {
         $fileContent = file( $directory );
+
+        $environmentVariables = preg_grep( '/(?(?=(^([\*]*?(\/\d)*?\s){5}))^$|^.*$)/', $fileContent );
         $rows = preg_grep( '/^([\*]*?(\/\d)*?\s){5}/', $fileContent );
 
+        //echo $directory;
+
         foreach ( $rows as $index => $row ) {
+            //echo $row,"<br>";
             $explodeRow[$index] = preg_split( '/[\s]+/', $row, 8 );
         }
 
         foreach ($explodeRow as $index => $rowElement) {
-            $newFileContent[$index] = array_combine( self::$keyword, $rowElement );
+            $cronCommands[$index] = array_combine( self::$keyword, $rowElement );
         }
-        //echo "<pre>";
-        //echo var_dump($newFileContent);
-        //echo "</pre>";
 
+        $environmentVariables = self::delEmpty($environmentVariables);
+
+
+        $newFileContent['environmentVariables'] = $environmentVariables;
+        $newFileContent['cronCommands'] = $cronCommands;
+        echo "<pre>";
+        echo var_dump($explodeRow);
+        echo "</pre>";
         return $newFileContent;
     }
 

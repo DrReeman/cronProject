@@ -20,6 +20,15 @@
                 <label><input type = "button" class = "addFullConfig" value = "Add" ></input></label>
                 <br>
                 <table>
+                    <?php foreach ($file['sourceContent']['environmentVariables'] as $enVarRows): ?>
+                        <tr>
+                            <td>
+                                <?php echo $enVarRows; ?>
+                            </td>
+                        </tr>
+                    <?php endforeach ?>
+                </table>
+                <table>
                     <tr>
                         <th colspan = "5">Расписание</th>
                         <th>Владелец</th>
@@ -28,7 +37,7 @@
                         <th>Добавить нужные</th>
                         <th>Операции</th>
                     </tr>
-                    <?php foreach ($file['sourceContent'] as $index => $row): ?>
+                    <?php foreach ($file['sourceContent']['cronCommands'] as $index => $row): ?>
                         <tr>
                             <?php ++$n; foreach ($row as $rowElement): ?>
                                 <td>
