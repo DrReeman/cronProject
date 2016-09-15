@@ -28,10 +28,10 @@ class CronConfig {
 
     public function addRowToFile( $args )
     {
-        if ( count($args['cronTiming']) == 8 ) {
-            return $args['cronTiming'];
+        if ( !empty($args['data']) ) {
+                return $args['data'];
         } else {
-          return;
+            return false;
         }
     }
 

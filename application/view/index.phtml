@@ -16,7 +16,7 @@
 
 <div id = "cronSources">
     <div id="accordionSource">
-        <?php $n = 0; foreach($content as $file): ?>
+        <?php $n = 0; $m = 0; foreach($content as $file): ?>
             <h3><?php echo $file['sourceName']; ?></h3>
             <div class = "fileContent">
                 <label><input type = "text" id = "sourceFileName" data-config-id = "<?php echo $file['configId']; ?>" hidden = "hidden" ></label>
@@ -28,20 +28,21 @@
                         <th>Добавить нужные</th>
                         <th>Операции</th>
                     </tr>
-                    <?php foreach ($file['sourceContent']['environmentVariables'] as $enVarRows): ?>
+                    <?php  foreach ($file['sourceContent']['environmentVariables'] as $enVarRows): ?>
                         <tr>
                             <td>
-                                <?php echo $enVarRows; ?>
+                                <?php $m++; echo $enVarRows; ?>
                             </td>
                             <td>
                                 <label><input class = "rowsGroup" type = "checkbox" data-row-index = "<?php echo $index; ?>"></label>
                             </td>
                             <td>
-                                <label><input type = "button" class = "addRowButton" id = "addRowButton<?php echo $n; ?>" value = "add row"></label>
+                                <label><input type = "button" class = "addRowButton" data-table-class = "envVars" id = "addEnvRowButton<?php echo $m; ?>" value = "add row"></label>
                             </td>
                         </tr>
                     <?php endforeach ?>
                 </table>
+                <br>
                 <table>
                     <tr>
                         <th colspan = "5">Расписание</th>
@@ -62,7 +63,7 @@
                                 <label><input class = "rowsGroup" type = "checkbox" data-row-index = "<?php echo $index; ?>"></label>
                             </td>
                             <td>
-                                <label><input type = "button" class = "addRowButton" id = "addRowButton<?php echo $n; ?>" value = "add row"></label>
+                                <label><input type = "button" class = "addRowButton" data-table-class = "cronCommands" id = "addCommandRowButton<?php echo $n; ?>" value = "add row"></label>
                             </td>
                         </tr>
                     <?php endforeach ?>

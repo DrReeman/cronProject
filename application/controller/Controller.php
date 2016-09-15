@@ -55,8 +55,6 @@ class Controller {
         );
     }
 
-
-
     public function addFullConfigAction( $args )
     {
         $environment = new Environment(
@@ -77,14 +75,17 @@ class Controller {
     {
         $cronConfig = new CronConfig();
         $data['content'] = $cronConfig->addRowToFile( $args );
-        $view = new View();
-        $view->renderPartial(
-            'addrow',
-            $data
-        );
+        if( false !== $data['content'] ) {
+            $view = new View();
+            $view->renderPartial(
+                'addrow',
+                $data
+            );
+        }
     }
 
-    public function saveFileAction( $args ) {
+    public function saveFileAction( $args )
+    {
         $cronConfig = new CronConfig();
         $cronConfig->save($args);
     }

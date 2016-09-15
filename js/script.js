@@ -1,7 +1,5 @@
 $(document).ready(function(){
 
-
-
     $('#environmentList').bind('change', function() {
         var action = 'getCurrentConfig';
         //var environmentId = $('#environmentList option:selected').data('id');
@@ -22,33 +20,34 @@ $(document).ready(function(){
         };
         sendData(action, param, userFunction);
     });
-function activeCronCommands() {
-    var tableCronCommands = $('#accordionCurrent')
-        .find('[aria-hidden="false"]')
-        .find('.cronCommands');
 
-    var rowsCronCommands = tableCronCommands.children().children('[data-type=tableContent]');
-    var rowsObj = {};
-    for (var i = 0; i < rowsCronCommands.length; i++) {
-        var rowData = [];
-        //var rowIndex = $(rows[i]).children().('[data-type=editable]')
-        var td = $(rowsCronCommands[i]).children('[data-type=editable]');
-        for (var j = 0; j < td.length; j++) {
-            rowData.push($(td[j]).text().trim());
+
+    function activeCronCommands() {
+        var tableCronCommands = $('#accordionCurrent')
+            .find('[aria-hidden="false"]')
+            .find('.cronCommands');
+
+        var rowsCronCommands = tableCronCommands.children().children('[data-type=tableContent]');
+        var rowsObj = {};
+        for (var i = 0; i < rowsCronCommands.length; i++) {
+            var rowData = [];
+            var td = $(rowsCronCommands[i]).children('[data-type=editable]');
+            for (var j = 0; j < td.length; j++) {
+                rowData.push($(td[j]).text().trim());
+            }
+            rowsObj[i] = rowData;
         }
-        rowsObj[i] = rowData;
+        return rowsObj;
     }
-    return rowsObj;
-}
 
 
     function activeEnvironVars() {
 
         var tableEnvironVars = $('#accordionCurrent')
             .find('[aria-hidden="false"]')
-            .find('.environVars');
+            .find('.envVars');
 
-        var rowsEnvironVars = tableEnvironVars.children().children();//'[data-type=tableContent]');
+        var rowsEnvironVars = tableEnvironVars.children().children('[data-type=tableContent]');
         var rowsObj = {};
         for (var i = 0; i < rowsEnvironVars.length; i++) {
             var rowData = [];
@@ -67,21 +66,26 @@ function activeCronCommands() {
 
     function addRow() {
         var data = getData(this);
+        var envVar = getEnvironmentVariables(this)
         var cronTiming = getCronTiming(this);
         var action = 'addRow';
+
         var userFunction = function(reqData){
             $('#accordionCurrent')
                 .find('[aria-hidden="false"]')
-                .find('.cronCommands')
+                .find('.'+data.tableClass)
                 .append(reqData);
-
-
         };
+        if(data.tableClass == 'envVars') {
+            var dataContent = envVar;
+        } else {
+            dataContent = cronTiming;
+        }
         var param = {
             "currentConfigName":data.currentConfigName,
-            "cronTiming":cronTiming
-
+            "data":dataContent
         };
+
         if (undefined === data.currentConfigName) {
             alert('Файл не определен!');
         } else {
@@ -138,7 +142,6 @@ function activeCronCommands() {
         };
         var activeCurrentConfig = $('#accordionCurrent').find("[aria-hidden='false']");
         var currentConfigName = activeCurrentConfig.find('#fileName').data('configName');
-        //var data = getData(this);
         var param = {
             "currentConfigName":currentConfigName,
             "environVarsConfig":environVarsConfig,
@@ -200,11 +203,13 @@ function activeCronCommands() {
         var currentConfigName = activeCurrentConfig.find('#fileName').data('configName');
         var activeSourceConfig = $('#accordionSource').find("[aria-hidden='false']");
         var sourceConfigId = activeSourceConfig.find('#fileName').data('configId');
+        var tableClass = $(button).data('tableClass');
         var object = {
             "rowIndex":rowIndex,
             "environmentId":environmentId,
             "currentConfigName":currentConfigName,
-            "sourceConfigId":sourceConfigId
+            "sourceConfigId":sourceConfigId,
+            "tableClass":tableClass
         };
         return object;
     }
@@ -259,6 +264,21 @@ function activeCronCommands() {
         };
 
         return cronTiming;
+    }
+
+    function getEnvironmentVariables(button) {
+        var row = $('#'+button.id)
+            .parent()
+            .parent()
+            .parent();
+        var envVar = row
+            .find(':nth-child(1)')
+            .text()
+            .trim();
+        var evironmentVars = {
+            "envVar":envVar
+        }
+        return evironmentVars;
     }
 
     function sendData(action,param,func) {

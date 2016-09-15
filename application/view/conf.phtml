@@ -10,13 +10,13 @@
             <label><input class = "saveButton" type = "button" value = "Save"></label>
             <label><input type = "button" value = "Save and Run"></label>
             <br>
-                <table class = 'environVars'>
-                    <tr>
+                <table class = 'envVars'>
+                    <tr data-type = "tableHead">
                         <th>Переменные окружения</th>
                         <th>Операции</th>
                     </tr>
                     <?php foreach ($file['configContent']['environmentVariables'] as $enVarRows): ?>
-                        <tr>
+                        <tr data-type = "tableContent">
                             <td>
                                 <?php echo $enVarRows; ?>
                             </td>
@@ -27,7 +27,7 @@
                         </tr>
                     <?php endforeach ?>
                 </table>
-
+                <br>
             <table class = 'cronCommands'>
                 <tr data-type = "tableHead">
                     <th colspan = "5">Расписание</th>
