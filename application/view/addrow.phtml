@@ -1,11 +1,11 @@
-<tr data-type = "tableContent" data-row-index = "<?php echo $index; ?>">
+<tr data-type = "tableContent" >
     <?php foreach ($content as $rowElement): ?>
         <td data-type = 'editable'>
             <?php echo $rowElement; ?>
         </td>
     <?php endforeach ?>
-    <td>
-        <label><input type = "button" class = "delRowButton" value = "del row" id = "delButton<?php echo $n++; ?>" ></input></label>
-        <label><input type = "button" class = "changeRowButton" value = "change row" id = "changeButton<?php echo $n++; ?>" ></input></label>
+    <td >
+        <label><input type = "button" class = "delRowButton" value = "del row" id = "delButton<?php echo $n++; ?>" ></label>
+        <label><input type = "button" class = "changeRowButton" value = "change row" id = "changeButton<?php echo $n++; ?>" ></label>
     </td>
 </tr>

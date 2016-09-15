@@ -26,34 +26,15 @@ th:first-child, td:first-child {
     text-align: left;
 }
 
-#search{
-    position: absolute;
-    width: 950px;
-    margin: 10px 20px;
-
-}
 #container{
     background-color: #FFDEAD;
     width: 1835px;
     height: 800px;
 }
-#lots{
-    position: absolute;
-    margin: 80px 20px;
-    width: 950px;
-    height: 600px;
-    background-color: #FFE4B5;
-}
-
-#searchField{
-    width:850px;
-}
-
-
 
 #cronSources {
     position: absolute;
-    margin: 80px 925px;
+    margin: 160px 925px;
     width: 890px;
     height: 600px;
     background-color: #FFE4B5;
@@ -61,7 +42,7 @@ th:first-child, td:first-child {
 
 #cronConfig {
     position: absolute;
-    margin: 80px 15px;
+    margin: 160px 15px;
     width: 890px;
     height: 600px;
     background-color: #FFE4B5;
@@ -79,5 +60,12 @@ th:first-child, td:first-child {
     width: 890px;
 }
 
+#message {
 
+    background-color: #FFE4B5;
+    position:absolute;
+    margin: 80px 15px;
+    width: 890px;
+    height: 60px;
+}
 

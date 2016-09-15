@@ -37,27 +37,23 @@ class CronConfig {
 
     public function save( $args )
     {
-        //$explodeContent = $args['environVarsConfig'] + $args['cronCommandsConfig'];
         foreach($args['environVarsConfig'] as $val) {
             $environVarsConfig[] = implode('', $val)  . PHP_EOL;
         }
-        $content[] = implode('', $environVarsConfig);
 
         foreach($args['cronCommandsConfig'] as $val) {
             $cronCommandsConfig[] = implode(' ', $val)  . PHP_EOL;
         }
+
+        $content[] = implode('', $environVarsConfig);
         $content[] = implode('', $cronCommandsConfig)  . PHP_EOL;
 
-        $content = implode(PHP_EOL, $content)  . PHP_EOL;
-
+        $content = implode(PHP_EOL, $content);
         $directory = self::PATH . $args['currentConfigName'];
-        //$file=file( $directory );
-        //file_put_contents( $directory, $content );
-        //$content = $environVarsConfig + $cronCommandsConfig;
-        //echo "<pre>";
-        // echo var_dump($content);
-       //  echo "</pre>";die;
-        //$content = implode(' ');
+        $result = file_put_contents( $directory, $content);
+        $message = ((bool)$result) ? 'Файл успешно сохранен!' : 'Произшла ошибка!';
+        echo $message;
+
     }
 
     public function delRowFromFile( $args )

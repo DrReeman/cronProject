@@ -4,17 +4,25 @@
 
         <h3><?php echo $file['configName']; ?></h3>
         <div class = "fileContent">
-            <input type = "text" id = "fileName" data-config-name = "<?php echo $file['configName']; ?>" hidden = "true" >
-            <label><input type = "button" value = "Delete"></input></label>
-            <label><input type = "button" value = "Run/Kill"></input></label>
-            <label><input class = "saveButton" type = "button" value = "Save"></input></label>
-            <label><input type = "button" value = "Save and Run"></input></label>
+            <label><input type = "text" id = "fileName" data-config-name = "<?php echo $file['configName']; ?>" hidden = "hidden" ></label>
+            <label><input type = "button" value = "Delete"></label>
+            <label><input type = "button" value = "Run/Kill"></label>
+            <label><input class = "saveButton" type = "button" value = "Save"></label>
+            <label><input type = "button" value = "Save and Run"></label>
             <br>
                 <table class = 'environVars'>
+                    <tr>
+                        <th>Переменные окружения</th>
+                        <th>Операции</th>
+                    </tr>
                     <?php foreach ($file['configContent']['environmentVariables'] as $enVarRows): ?>
                         <tr>
                             <td>
                                 <?php echo $enVarRows; ?>
+                            </td>
+                            <td>
+                                <label><input type = "button" class = "delRowButton" value = "del row" id = "delButton<?php echo $n++; ?>" data-row-index = "<?php echo $index; ?>"></label>
+                                <label><input type = "button" class = "changeRowButton" value = "change row" id = "changeButton<?php echo $n++; ?>" data-row-index = "<?php echo $index; ?>"></label>
                             </td>
                         </tr>
                     <?php endforeach ?>
@@ -36,8 +44,8 @@
                             </td>
                          <?php endforeach ?>
                             <td>
-                                <label><input type = "button" class = "delRowButton" value = "del row" id = "delButton<?php echo $n++; ?>" data-row-index = "<?php echo $index; ?>"></input></label>
-                                <label><input type = "button" class = "changeRowButton" value = "change row" id = "changeButton<?php echo $n++; ?>" data-row-index = "<?php echo $index; ?>"></input></label>
+                                <label><input type = "button" class = "delRowButton" value = "del row" id = "delButton<?php echo $n++; ?>" data-row-index = "<?php echo $index; ?>"></label>
+                                <label><input type = "button" class = "changeRowButton" value = "change row" id = "changeButton<?php echo $n++; ?>" data-row-index = "<?php echo $index; ?>"></label>
                             </td>
                     </tr>
                 <?php endforeach ?>

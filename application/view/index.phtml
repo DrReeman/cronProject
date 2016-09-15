@@ -1,7 +1,7 @@
 <div id="environment">
     <label>
         <select id = "environmentList">
-            <option data-id = '0' id = "emptyOption" selected = "true">Выберите ветку</option>
+            <option data-id = '0' id = "emptyOption" selected = "selected">Выберите ветку</option>
             <?php foreach ($envList as $key => $value): ?>
                 <option data-id = '<?php echo $value['environmentId']; ?>' data-IP = '<?php echo $value['environmentIP']; ?>'>
                     <?php echo $value['environmentHostName']; ?>
@@ -11,19 +11,33 @@
     </label>
 </div>
 
+<div id = "message">
+</div>
+
 <div id = "cronSources">
     <div id="accordionSource">
         <?php $n = 0; foreach($content as $file): ?>
             <h3><?php echo $file['sourceName']; ?></h3>
             <div class = "fileContent">
-                <input type = "text" id = "sourceFileName" data-config-id = "<?php echo $file['configId']; ?>" hidden = "true" >
-                <label><input type = "button" class = "addFullConfig" value = "Add" ></input></label>
+                <label><input type = "text" id = "sourceFileName" data-config-id = "<?php echo $file['configId']; ?>" hidden = "hidden" ></label>
+                <label><input type = "button" class = "addFullConfig" value = "Add" ></label>
                 <br>
                 <table>
+                    <tr>
+                        <th>Переменные окружения</th>
+                        <th>Добавить нужные</th>
+                        <th>Операции</th>
+                    </tr>
                     <?php foreach ($file['sourceContent']['environmentVariables'] as $enVarRows): ?>
                         <tr>
                             <td>
                                 <?php echo $enVarRows; ?>
+                            </td>
+                            <td>
+                                <label><input class = "rowsGroup" type = "checkbox" data-row-index = "<?php echo $index; ?>"></label>
+                            </td>
+                            <td>
+                                <label><input type = "button" class = "addRowButton" id = "addRowButton<?php echo $n; ?>" value = "add row"></label>
                             </td>
                         </tr>
                     <?php endforeach ?>
@@ -44,9 +58,11 @@
                                     <?php echo $rowElement; ?>
                                 </td>
                             <?php endforeach ?>
-                            <td><input class = "rowsGroup" type = "checkbox" data-row-index = "<?php echo $index; ?>"></input></td>
                             <td>
-                                <label><input type = "button" class = "addRowButton" id = "addRowButton<?php echo $n; ?>" value = "add row"></input></label>
+                                <label><input class = "rowsGroup" type = "checkbox" data-row-index = "<?php echo $index; ?>"></label>
+                            </td>
+                            <td>
+                                <label><input type = "button" class = "addRowButton" id = "addRowButton<?php echo $n; ?>" value = "add row"></label>
                             </td>
                         </tr>
                     <?php endforeach ?>

@@ -4,7 +4,7 @@ $(document).ready(function(){
 
     $('#environmentList').bind('change', function() {
         var action = 'getCurrentConfig';
-        var environmentId = $('#environmentList option:selected').data('id');
+        //var environmentId = $('#environmentList option:selected').data('id');
         var userFunction = function(reqData){
             $('#cronConfig').html(reqData);
             $("#accordionCurrent").accordion({
@@ -93,7 +93,7 @@ function activeCronCommands() {
         var data = getData(this);
         var action = 'delRow';
         var userFunction = function(reqData) {
-            alert(reqData);
+            $('#message').html(reqData);
         };
         var param = {
                 "currentConfigName":data.currentConfigName,
@@ -112,7 +112,7 @@ function activeCronCommands() {
         var cronTiming = getCronTiming(this);
         var action = 'editRow';
         var userFunction = function(reqData) {
-            alert(reqData);
+            $('#message').html(reqData);
         };
         var param = {
                 "currentConfigName":data.currentConfigName,
@@ -134,7 +134,7 @@ function activeCronCommands() {
         var cronCommandsConfig = activeCronCommands();
         var action = 'saveFile';
         var userFunction = function(reqData) {
-            alert(reqData);
+            $('#message').html(reqData);
         };
         var activeCurrentConfig = $('#accordionCurrent').find("[aria-hidden='false']");
         var currentConfigName = activeCurrentConfig.find('#fileName').data('configName');
@@ -163,7 +163,8 @@ function activeCronCommands() {
         var action = 'addFullConfig';
         //alert(environmentId);
         var userFunction = function(reqData) {
-            alert(reqData);
+            $('#message').html(reqData);
+            //alert(reqData);
         };
         var param = {
             "sourceConfigId":sourceConfigId,

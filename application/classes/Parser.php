@@ -41,7 +41,7 @@ class Parser {
         //echo $directory;
 
         foreach ( $rows as $index => $row ) {
-            //echo $row,"<br>";
+           // echo $row,"<br>";
             $explodeRow[$index] = preg_split( '/[\s]+/', $row, 8 );
         }
 
@@ -54,9 +54,9 @@ class Parser {
 
         $newFileContent['environmentVariables'] = $environmentVariables;
         $newFileContent['cronCommands'] = $cronCommands;
-        echo "<pre>";
-        echo var_dump($explodeRow);
-        echo "</pre>";
+        //echo "<pre>";
+        //echo var_dump($explodeRow);
+        //echo "</pre>";
         return $newFileContent;
     }
 
