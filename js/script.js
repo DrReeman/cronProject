@@ -4,16 +4,22 @@ $(document).ready(function(){
         var action = 'getCurrentConfig';
         //var environmentId = $('#environmentList option:selected').data('id');
         var userFunction = function(reqData){
-            $('#cronConfig').html(reqData);
-            $("#accordionCurrent").accordion({
-                active: false,
-                collapsible:true
-            });
-            $('.saveButton').bind('click', saveFile);
+            $('#accordionCurrent').accordion('destroy');
+            var initParam = {
+                'active':true,
+                'collapsible': true
+            };
+
+            reinitAccordion(
+                '#accordionCurrent',
+                reqData,
+                initParam
+            );
             $('.delRowButton').bind('click', delRow);
             $('.changeRowButton').bind('click', changeRow);
             $('td').bind('click', cellClick);
         };
+
         var param = {
         //    "environmentId":environmentId
 
@@ -21,6 +27,17 @@ $(document).ready(function(){
         sendData(action, param, userFunction);
     });
 
+
+    $("#accordionCurrent").accordion();
+
+    function reinitAccordion(accordionId, reqData, initParams) {
+        //$(accordionId).accordion('destroy');
+        $(accordionId).empty();
+        $(accordionId).append(reqData);
+       // $(accordionId).accordion({ 'active':true, 'collapsible':true });
+        $(accordionId).accordion(initParams);
+        $('.saveButton').bind('click', saveFile);
+    }
 
     function activeCronCommands() {
         var tableCronCommands = $('#accordionCurrent')
@@ -60,7 +77,7 @@ $(document).ready(function(){
        return rowsObj;
     }
 
-
+    $('#createFile').bind('click', createNewFile);
     $('.addFullConfig').bind('click', addRowGroup);
     $('.addRowButton').bind('click', addRow);
 
@@ -136,12 +153,22 @@ $(document).ready(function(){
 
         var environVarsConfig = activeEnvironVars();
         var cronCommandsConfig = activeCronCommands();
+
         var action = 'saveFile';
         var userFunction = function(reqData) {
             $('#message').html(reqData);
         };
         var activeCurrentConfig = $('#accordionCurrent').find("[aria-hidden='false']");
         var currentConfigName = activeCurrentConfig.find('#fileName').data('configName');
+        if (currentConfigName == "new file") {
+            if(!$('#fileName').val()) {
+                currentConfigName = $('#fileName').val();
+            } else {
+                alert('Имя файла не задано!');
+
+            }
+
+        }
         var param = {
             "currentConfigName":currentConfigName,
             "environVarsConfig":environVarsConfig,
@@ -153,6 +180,27 @@ $(document).ready(function(){
         } else {
             sendData(action, param, userFunction);
         }
+    }
+
+    function createNewFile() {
+        var action = 'createNewFile';
+        var param = {};
+
+        var userFunction = function(reqData){
+            $('#accordionCurrent').accordion('destroy');
+            var data = $('#accordionCurrent').html();
+            var  initParam = {
+                'active': 0,
+                'collapsible':true
+            };
+            reqData += data;
+            reinitAccordion('#accordionCurrent', reqData, initParam);
+            if( $('#accordionCurrent').find('h3').filter('[data-new="true"]').length != 0 ){
+                $('#createFile').prop('disabled', true);
+            }
+        };
+
+        sendData(action, param, userFunction);
     }
 
     function addRowGroup() {
