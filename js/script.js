@@ -88,10 +88,16 @@ $(document).ready(function(){
         var action = 'addRow';
 
         var userFunction = function(reqData){
-            $('#accordionCurrent')
+           var table = $('#accordionCurrent')
                 .find('[aria-hidden="false"]')
-                .find('.'+data.tableClass)
-                .append(reqData);
+                .find('.'+data.tableClass);
+           var emptyRow = table.children().children('[data-new-row="newEmptyRow"]');
+
+            if ( emptyRow.length != 0 ) {
+                emptyRow.before(reqData);
+            } else {
+                table.append(reqData);
+            }
         };
         if(data.tableClass == 'envVars') {
             var dataContent = envVar;
@@ -161,7 +167,7 @@ $(document).ready(function(){
         var activeCurrentConfig = $('#accordionCurrent').find("[aria-hidden='false']");
         var currentConfigName = activeCurrentConfig.find('#fileName').data('configName');
         if (currentConfigName == "new file") {
-            if(!$('#fileName').val()) {
+            if( $('#fileName').val() ) {
                 currentConfigName = $('#fileName').val();
             } else {
                 alert('Имя файла не задано!');

@@ -1,11 +1,6 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: domrachev
- * Date: 23.08.16
- * Time: 17:07
- */
-namespace ConnectionDB;
+
+namespace Connection;
 use PDO;
 
 class DBConnection extends PDO{

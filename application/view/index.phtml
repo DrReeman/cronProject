@@ -52,23 +52,26 @@
                         <th>Добавить нужные</th>
                         <th>Операции</th>
                     </tr>
-                    <?php foreach ($file['sourceContent']['cronCommands'] as $index => $row): ?>
-                        <tr>
-                            <?php ++$n; foreach ($row as $rowElement): ?>
+
+                        <?php foreach ($file['sourceContent']['cronCommands'] as $index => $row): ?>
+                            <tr>
+                                <?php ++$n; foreach ($row as $rowElement): ?>
+                                    <td>
+                                        <?php echo $rowElement; ?>
+                                    </td>
+                                <?php endforeach ?>
                                 <td>
-                                    <?php echo $rowElement; ?>
+                                    <label><input class = "rowsGroup" type = "checkbox" data-row-index = "<?php echo $index; ?>"></label>
                                 </td>
-                            <?php endforeach ?>
-                            <td>
-                                <label><input class = "rowsGroup" type = "checkbox" data-row-index = "<?php echo $index; ?>"></label>
-                            </td>
-                            <td>
-                                <label><input type = "button" class = "addRowButton" data-table-class = "cronCommands" id = "addCommandRowButton<?php echo $n; ?>" value = "add row"></label>
-                            </td>
-                        </tr>
-                    <?php endforeach ?>
+                                <td>
+                                    <label><input type = "button" class = "addRowButton" data-table-class = "cronCommands" id = "addCommandRowButton<?php echo $n; ?>" value = "add row"></label>
+                                </td>
+                            </tr>
+                        <?php endforeach ?>
+
                 </table>
             </div>
+
         <?php endforeach ?>
     </div>
 </div>

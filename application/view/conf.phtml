@@ -1,4 +1,4 @@
-<div id="accordionCurrent">
+
 <?php foreach($content as $file): ?>
 
 
@@ -17,7 +17,7 @@
                     </tr>
                     <?php foreach ($file['configContent']['environmentVariables'] as $enVarRows): ?>
                         <tr data-type = "tableContent">
-                            <td>
+                            <td data-type = 'editable'>
                                 <?php echo $enVarRows; ?>
                             </td>
                             <td>
@@ -36,21 +36,23 @@
                     <th>Команда</th>
                     <th>Операции</th>
                 </tr>
-                <?php $n = 0; foreach ($file['configContent']['cronCommands'] as $index => $row): ?>
-                    <tr data-type = "tableContent" data-row-index = "<?php echo $index; ?>">
-                        <?php foreach ($row as $rowElement): ?>
-                            <td data-type = 'editable'>
-                                <?php echo $rowElement; ?>
-                            </td>
-                         <?php endforeach ?>
-                            <td>
-                                <label><input type = "button" class = "delRowButton" value = "del row" id = "delButton<?php echo $n++; ?>" data-row-index = "<?php echo $index; ?>"></label>
-                                <label><input type = "button" class = "changeRowButton" value = "change row" id = "changeButton<?php echo $n++; ?>" data-row-index = "<?php echo $index; ?>"></label>
-                            </td>
-                    </tr>
-                <?php endforeach ?>
+                <?php if ( !empty( $file['configContent']['cronCommands'] ) ) : ?>
+                    <?php $n = 0; foreach ($file['configContent']['cronCommands'] as $index => $row): ?>
+                        <tr data-type = "tableContent" data-row-index = "<?php echo $index; ?>">
+                            <?php foreach ($row as $rowElement): ?>
+                                <td data-type = 'editable'>
+                                    <?php echo $rowElement; ?>
+                                </td>
+                             <?php endforeach ?>
+                                <td>
+                                    <label><input type = "button" class = "delRowButton" value = "del row" id = "delButton<?php echo $n++; ?>" data-row-index = "<?php echo $index; ?>"></label>
+                                    <label><input type = "button" class = "changeRowButton" value = "change row" id = "changeButton<?php echo $n++; ?>" data-row-index = "<?php echo $index; ?>"></label>
+                                </td>
+                        </tr>
+                    <?php endforeach ?>
+                <?php endif ?>
             </table>
 
         </div>
 <?php endforeach ?>
-</div>
+

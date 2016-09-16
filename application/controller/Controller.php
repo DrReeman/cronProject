@@ -5,7 +5,7 @@ namespace Controller;
 use View\view;
 use Model\Environment;
 use Model\CronConfig;
-use ConnectionDB\DBConnection;
+use Connection\DBConnection;
 
 class Controller {
 
@@ -16,6 +16,7 @@ class Controller {
 
     public function indexAction()
     {
+
         $environment = new Environment(
             $this->setConnection()
         );
@@ -37,10 +38,21 @@ class Controller {
         );
     }
 
+    public function createNewFileAction()
+    {
+        $view = new View();
+        $view->renderPartial(
+            'createNew',
+            array()
+        );
+    }
+
     public function getCurrentConfigAction()
     {
+
         $cronConfig = new CronConfig();
         $currentConfig = $cronConfig->getCurrentConfigList();
+
         $source = array();
 
         foreach ($currentConfig as $value) {

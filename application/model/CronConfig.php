@@ -3,28 +3,38 @@
 namespace Model;
 
 use Parser\Parser;
+use Connection\SSHConnection;
 
 class CronConfig {
 
-    const PATH = '/www/CronProject1/cron.d/';
+    //private $sshConnection;
+    //const FILEPATH = '/etc/cron.d/';
+       private $host = '192.168.215.227';
+       private $port = 22;
+       private $userName = 'developer';
+       private $userPass = 'developer';
+
 
     public function getCurrentConfigList() {
-        $files = array_diff( scandir( self::PATH ), array( '..', '.' ) );
+        $connection = new SSHConnection($this->host, $this->port, $this->userName, $this->userPass);
+        $files = $connection->getFileList();
+        $files = array_diff( $files, array( '..', '.' ) );
+
         return $files;
     }
 
     public function getCurrentConfigContent( $fileName )
     {
-        $directory = self::PATH . $fileName;
-        $configContent = Parser::getContent( $directory );
+        $connection = new SSHConnection($this->host, $this->port, $this->userName, $this->userPass);
+        $fileContent = $connection->getFileContent( $fileName );
+        $configContent = Parser::getContent( $fileContent );
         $current['configName'] = $fileName;
-        $current['directory'] = $directory;
         $current['configContent'] = $configContent;
-        //echo "<pre>";
-       // echo var_dump($current['configContent']);
-       // echo "</pre>";die;
+
         return $current;
     }
+
+
 
     public function addRowToFile( $args )
     {
@@ -49,16 +59,25 @@ class CronConfig {
         $content[] = implode('', $cronCommandsConfig)  . PHP_EOL;
 
         $content = implode(PHP_EOL, $content);
-        $directory = self::PATH . $args['currentConfigName'];
-        $result = file_put_contents( $directory, $content);
-        $message = ((bool)$result) ? 'Файл успешно сохранен!' : 'Произшла ошибка!';
-        echo $message;
+
+
+        $connection = new SSHConnection($this->host, $this->port, $this->userName, $this->userPass);
+        $args['content'] = $content;
+        $args['fileName'] = $args['currentConfigName'];
+        $connection->createNewFile( $args );
+        //$directory = 'ssh2.sftp://' . $sftp . self::FILEPATH . $args['currentConfigName'];
+        //$directory = self::FILEPATH . $args['currentConfigName'];
+        //$result = file_put_contents( $directory, $content);
+       // $message = ((bool)$result) ? 'Файл успешно сохранен!' : 'Произшла ошибка!';
+       // echo $message;
 
     }
 
     public function delRowFromFile( $args )
     {
-        $directory = self::PATH . $args['configName'];
+        $sftp = ssh2_sftp($this->sshConnection);
+        $directory = 'ssh2.sftp://' . $sftp . self::FILEPATH . $args['configName'];
+        //$directory = self::FILEPATH . $args['configName'];
 
         if ( $args['rowIndex'] != '' ) {
             $file=file( $directory );
@@ -73,7 +92,9 @@ class CronConfig {
 
     public function editRowInFile( $args )
     {
-        $directory = self::PATH . $args['configName'];
+        $sftp = ssh2_sftp($this->sshConnection);
+        $directory = 'ssh2.sftp://' . $sftp . self::FILEPATH . $args['configName'];
+        //$directory = self::FILEPATH . $args['configName'];
         $row = implode( ' ', $args['cronTiming'] ) . PHP_EOL;
 
         if ( $args['rowIndex'] != '' ) {
@@ -89,12 +110,14 @@ class CronConfig {
 
     public function createNewConfig( $filePath, $args )
     {
+        //$sftp = ssh2_sftp($this->sshConnection);
+
         $fileRows = Parser::newFileRows( $filePath, $args['rowGroup'] );
         $explodeFilePath = explode( '/', $filePath );
         $len = count( $explodeFilePath );
         $fileName = $explodeFilePath[$len-1];
         $row = implode( '', $fileRows ) . PHP_EOL;
-        file_put_contents( self::PATH . $fileName, $row );
+        file_put_contents( 'ssh2.sftp://' . $sftp . self::FILEPATH . $fileName, $row );
     }
 
 }

@@ -42,7 +42,9 @@ class Environment
     {
         $filename = $args['configName'] . '.' . $args['configExtension'];
         $fullDirectory = $args['directory'] . $filename;
-        $configContent = Parser::getContent( $fullDirectory );
+        $fileContent = file( $fullDirectory );
+        //echo $fullDirectory;
+        $configContent = Parser::getContent( $fileContent );
         $source['sourceName'] = $filename;
         $source['configId'] = $args['configId'];
         $source['sourceContent'] = $configContent;

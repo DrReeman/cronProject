@@ -1,11 +1,12 @@
 <?php
-//ini_set('display_errors', 1);
-
+ini_set('display_errors', 1);
+//phpinfo();
 $directory = __DIR__;
 
 require_once $directory . '/application/controller/Controller.php';
 require_once $directory . '/application/view.php';
 require_once $directory . '/application/classes/connection.php';
+require_once $directory . '/application/classes/sshconnection.php';
 require_once $directory . '/application/classes/Parser.php';
 require_once $directory . '/application/model/Environment.php';
 require_once $directory . '/application/model/CronConfig.php';
@@ -15,19 +16,15 @@ use Controller\Controller;
 
 $action = '';
 $param = null;
-if ( !empty($_POST['action']) )
-    {
-        $action = $_POST['action'];
-    }
-else
-    {
-        $action = 'index';
-    }
+if ( !empty($_POST['action']) ) {
+     $action = $_POST['action'];
+} else {
+     $action = 'index';
+}
 
-if ( !empty($_POST['param']) )
-    {
-        $param = $_POST['param'];
-    }
+if ( !empty($_POST['param']) ) {
+     $param = $_POST['param'];
+}
 
 $actionName = $action.'Action';
 $controller = new Controller();

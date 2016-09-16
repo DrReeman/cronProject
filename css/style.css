@@ -34,7 +34,7 @@ th:first-child, td:first-child {
 
 #cronSources {
     position: absolute;
-    margin: 160px 925px;
+    margin: 180px 925px;
     width: 890px;
     height: 600px;
     background-color: #FFE4B5;
@@ -42,7 +42,7 @@ th:first-child, td:first-child {
 
 #cronConfig {
     position: absolute;
-    margin: 160px 15px;
+    margin: 180px 15px;
     width: 890px;
     height: 600px;
     background-color: #FFE4B5;
@@ -64,8 +64,17 @@ th:first-child, td:first-child {
 
     background-color: #FFE4B5;
     position:absolute;
-    margin: 80px 15px;
+    margin: 70px 15px;
     width: 890px;
     height: 60px;
+}
+
+#create {
+
+    background-color: #FFE4B5;
+    position:absolute;
+    margin: 140px 15px;
+    width: 890px;
+    height: 30px;
 }
 

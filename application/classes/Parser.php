@@ -32,35 +32,33 @@ class Parser {
         return $newArr;
     }
 
-    static function getContent( $directory ) {
-        $fileContent = file( $directory );
+    static function getContent( $fileContent ) {
 
-        $environmentVariables = preg_grep( '/(?(?=(^([\*]*?(\/\d)*?\s){5}))^$|^.*$)/', $fileContent );
-        $rows = preg_grep( '/^([\*]*?(\/\d)*?\s){5}/', $fileContent );
+        $environmentVariables = preg_grep( '/(?(?=(^([\*]*?(\/\d)*?([\d])*?\s){5}))^$|^.*$)/', $fileContent );
+        $rows = preg_grep( '/^([\*]*?(\/\d)*?([\d])*?\s){5}/', $fileContent );
 
-        //echo $directory;
+        $rows = self::delEmpty($rows);
+        $environmentVariables = self::delEmpty($environmentVariables);
 
         foreach ( $rows as $index => $row ) {
-           // echo $row,"<br>";
             $explodeRow[$index] = preg_split( '/[\s]+/', $row, 8 );
         }
 
-        foreach ($explodeRow as $index => $rowElement) {
-            $cronCommands[$index] = array_combine( self::$keyword, $rowElement );
+        if(!empty($explodeRow)) {
+            foreach ($explodeRow as $index => $rowElement) {
+                $cronCommands[$index] = array_combine( self::$keyword, $rowElement );
+            }
+        } else {
+            $cronCommands = "";
         }
-
-        $environmentVariables = self::delEmpty($environmentVariables);
-
 
         $newFileContent['environmentVariables'] = $environmentVariables;
         $newFileContent['cronCommands'] = $cronCommands;
-        //echo "<pre>";
-        //echo var_dump($explodeRow);
-        //echo "</pre>";
+
         return $newFileContent;
     }
 
-    static function newFileRows( $filePath, $rowGroup ) {
+    static function newFileRows( $sshConnection, $filePath, $rowGroup ) {
         $fileContent = file($filePath);
         $rowsTiming = preg_grep( '/^([\*]*?(\/\d)*?\s){5}/', $fileContent );
         $rowsNotTiming = preg_grep( '/(?(?=(^([\*]*?(\/\d)*?\s){5}))^$|^.*$)/', $fileContent );
