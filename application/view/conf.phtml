@@ -5,7 +5,7 @@
         <h3><?php echo $file['configName']; ?></h3>
         <div class = "fileContent">
             <label><input type = "text" id = "fileName" data-config-name = "<?php echo $file['configName']; ?>" hidden = "hidden" ></label>
-            <label><input type = "button" value = "Delete"></label>
+            <label><input class = "deleteButton" type = "button" value = "Delete"></label>
             <label><input type = "button" value = "Run/Kill"></label>
             <label><input class = "saveButton" type = "button" value = "Save"></label>
             <label><input type = "button" value = "Save and Run"></label>
@@ -17,7 +17,7 @@
                     </tr>
                     <?php foreach ($file['configContent']['environmentVariables'] as $enVarRows): ?>
                         <tr data-type = "tableContent">
-                            <td data-type = 'editable'>
+                            <td data-type = 'editable' >
                                 <?php echo $enVarRows; ?>
                             </td>
                             <td>
@@ -32,7 +32,6 @@
                 <tr data-type = "tableHead">
                     <th colspan = "5">Расписание</th>
                     <th>Владелец</th>
-                    <th>Процесс</th>
                     <th>Команда</th>
                     <th>Операции</th>
                 </tr>

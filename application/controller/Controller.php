@@ -65,8 +65,9 @@ class Controller {
             'conf',
             $data
         );
-    }
 
+    }
+/*
     public function addFullConfigAction( $args )
     {
         $environment = new Environment(
@@ -82,7 +83,7 @@ class Controller {
             $args
         );
     }
-
+*/
     public function addRowAction( $args )
     {
         $cronConfig = new CronConfig();
@@ -101,7 +102,7 @@ class Controller {
         $cronConfig = new CronConfig();
         $cronConfig->save($args);
     }
-
+/*
     public function delRowAction( $args )
     {
         $cronConfig = new CronConfig();
@@ -114,11 +115,13 @@ class Controller {
         $cronConfig = new CronConfig();
         $cronConfig->editRowInFile( $args );
     }
-
-    public function delFullConfigAction( $args )
+*/
+    public function removeConfigAction( $args )
     {
+        $cronConfig = new CronConfig();
+        $cronConfig->removeConfig( $args );
     }
-
+/*
     public function killAction( $args )
     {
     }
@@ -126,4 +129,6 @@ class Controller {
     public function runAction( $args )
     {
     }
+
+*/
 }

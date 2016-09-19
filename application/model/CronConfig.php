@@ -7,13 +7,16 @@ use Connection\SSHConnection;
 
 class CronConfig {
 
-    //private $sshConnection;
-    //const FILEPATH = '/etc/cron.d/';
-       private $host = '192.168.215.227';
-       private $port = 22;
-       private $userName = 'developer';
-       private $userPass = 'developer';
+      // private $host = '192.168.215.227';
+      // private $port = 22;
+      // private $userName = 'developer';
+      // private $userPass = 'developer';
 
+
+    private $host = '192.168.191.221';
+    private $port = 22;
+    private $userName = 'root';
+    private $userPass = 'reemanintegral1994';
 
     public function getCurrentConfigList() {
         $connection = new SSHConnection($this->host, $this->port, $this->userName, $this->userPass);
@@ -60,19 +63,14 @@ class CronConfig {
 
         $content = implode(PHP_EOL, $content);
 
-
         $connection = new SSHConnection($this->host, $this->port, $this->userName, $this->userPass);
         $args['content'] = $content;
         $args['fileName'] = $args['currentConfigName'];
-        $connection->createNewFile( $args );
-        //$directory = 'ssh2.sftp://' . $sftp . self::FILEPATH . $args['currentConfigName'];
-        //$directory = self::FILEPATH . $args['currentConfigName'];
-        //$result = file_put_contents( $directory, $content);
-       // $message = ((bool)$result) ? 'Файл успешно сохранен!' : 'Произшла ошибка!';
-       // echo $message;
+        $message = $connection->createNewFile( $args );
+        echo $message;
 
     }
-
+/*
     public function delRowFromFile( $args )
     {
         $sftp = ssh2_sftp($this->sshConnection);
@@ -108,16 +106,14 @@ class CronConfig {
         }
     }
 
-    public function createNewConfig( $filePath, $args )
-    {
-        //$sftp = ssh2_sftp($this->sshConnection);
+*/
 
-        $fileRows = Parser::newFileRows( $filePath, $args['rowGroup'] );
-        $explodeFilePath = explode( '/', $filePath );
-        $len = count( $explodeFilePath );
-        $fileName = $explodeFilePath[$len-1];
-        $row = implode( '', $fileRows ) . PHP_EOL;
-        file_put_contents( 'ssh2.sftp://' . $sftp . self::FILEPATH . $fileName, $row );
+
+    public function removeConfig( $args )
+    {
+        $connection = new SSHConnection($this->host, $this->port, $this->userName, $this->userPass);
+        $message = $connection->removeFile( $args );
+        echo $message;
     }
 
 }

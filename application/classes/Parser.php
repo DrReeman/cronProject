@@ -18,7 +18,6 @@ class Parser {
         'month',
         'weekday',
         'owner',
-        'process',
         'command',
 
     );
@@ -41,7 +40,7 @@ class Parser {
         $environmentVariables = self::delEmpty($environmentVariables);
 
         foreach ( $rows as $index => $row ) {
-            $explodeRow[$index] = preg_split( '/[\s]+/', $row, 8 );
+            $explodeRow[$index] = preg_split( '/[\s]+/', $row, 7 );
         }
 
         if(!empty($explodeRow)) {
