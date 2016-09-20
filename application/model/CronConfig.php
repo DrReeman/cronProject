@@ -5,7 +5,8 @@ namespace Model;
 use Parser\Parser;
 use Connection\SSHConnection;
 
-class CronConfig {
+class CronConfig
+{
 
       // private $host = '192.168.215.227';
       // private $port = 22;
@@ -26,11 +27,11 @@ class CronConfig {
         return $files;
     }
 
-    public function getCurrentConfigContent( $fileName )
+    public function getCurrentConfigContent($fileName)
     {
         $connection = new SSHConnection($this->host, $this->port, $this->userName, $this->userPass);
-        $fileContent = $connection->getFileContent( $fileName );
-        $configContent = Parser::getContent( $fileContent );
+        $fileContent = $connection->getFileContent($fileName);
+        $configContent = Parser::getContent($fileContent);
         $current['configName'] = $fileName;
         $current['configContent'] = $configContent;
 
@@ -39,22 +40,27 @@ class CronConfig {
 
 
 
-    public function addRowToFile( $args )
+    public function addRowToFile($args)
     {
-        if ( !empty($args['data']) ) {
-                return $args['data'];
-        } else {
+        if (!empty($args['data']))
+        {
+            return $args['data'];
+        }
+        else
+        {
             return false;
         }
     }
 
-    public function save( $args )
+    public function save($args)
     {
-        foreach($args['environVarsConfig'] as $val) {
+        foreach ($args['environVarsConfig'] as $val)
+        {
             $environVarsConfig[] = implode('', $val)  . PHP_EOL;
         }
 
-        foreach($args['cronCommandsConfig'] as $val) {
+        foreach ($args['cronCommandsConfig'] as $val)
+        {
             $cronCommandsConfig[] = implode(' ', $val)  . PHP_EOL;
         }
 
@@ -66,9 +72,9 @@ class CronConfig {
         $connection = new SSHConnection($this->host, $this->port, $this->userName, $this->userPass);
         $args['content'] = $content;
         $args['fileName'] = $args['currentConfigName'];
-        $message = $connection->createNewFile( $args );
-        echo $message;
+        $message = $connection->createNewFile($args);
 
+        echo $message;
     }
 /*
     public function delRowFromFile( $args )
@@ -109,10 +115,11 @@ class CronConfig {
 */
 
 
-    public function removeConfig( $args )
+    public function removeConfig($args)
     {
         $connection = new SSHConnection($this->host, $this->port, $this->userName, $this->userPass);
-        $message = $connection->removeFile( $args );
+        $message = $connection->removeFile($args);
+
         echo $message;
     }
 

@@ -3,7 +3,8 @@
 namespace Connection;
 use PDO;
 
-class DBConnection extends PDO{
+class DBConnection extends PDO
+{
 
     private $DB_HOST = 'localhost';
     private $DB_NAME = 'CronProject';
@@ -12,10 +13,13 @@ class DBConnection extends PDO{
 
     function __construct()
     {
-        try {
+        try
+        {
             parent::__construct("mysql:host=$this->DB_HOST;dbname=$this->DB_NAME", $this->DB_USER, $this->DB_PASS);
 
-        } catch (\pdoexception $e) {
+        }
+        catch (\pdoexception $e)
+        {
             echo "database error: " . $e->getmessage();
             die();
         }

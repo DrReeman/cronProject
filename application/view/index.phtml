@@ -55,7 +55,7 @@
                         <?php foreach ($file['sourceContent']['cronCommands'] as $index => $row): ?>
                             <tr>
                                 <?php ++$n; foreach ($row as $rowElement): ?>
-                                    <td>
+                                    <td data-type = "content">
                                         <?php echo $rowElement; ?>
                                     </td>
                                 <?php endforeach ?>

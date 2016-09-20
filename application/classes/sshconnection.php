@@ -3,7 +3,8 @@
 namespace Connection;
 
 
-class SSHConnection {
+class SSHConnection
+{
 
     private $connection;
     const PATH = '/etc/cron.d/';
@@ -26,7 +27,9 @@ class SSHConnection {
             if ( ! $authentication)
                 throw new Exception("Could not authenticate '{$userName}' using password: '{$userPass}'.");
 
-        } catch(Exception $e) {
+        }
+        catch(Exception $e)
+        {
                 $this->errorMessage($e->getMessage());
         }
 
@@ -40,10 +43,10 @@ class SSHConnection {
 
     }
 
-    public function getFileContent( $fileName )
+    public function getFileContent($fileName)
     {
         $sftp = ssh2_sftp($this->connection);
-        return file('ssh2.sftp://' . $sftp . self::PATH . $fileName );
+        return file('ssh2.sftp://' . $sftp . self::PATH . $fileName);
     }
 
     public function createNewFile($args)

@@ -16,27 +16,31 @@ use Controller\Controller;
 
 $action = '';
 $param = null;
-if ( !empty($_POST['action']) ) {
+if (!empty($_POST['action']))
+{
      $action = $_POST['action'];
-} else {
+}
+else
+{
      $action = 'index';
 }
 
-if ( !empty($_POST['param']) ) {
+if (!empty($_POST['param']))
+{
      $param = $_POST['param'];
 }
 
 $actionName = $action.'Action';
 $controller = new Controller();
 
-if ( method_exists ( $controller, $actionName ) )
-    {
-        $controller->$actionName ( $param );
-    }
+if (method_exists ($controller, $actionName))
+{
+     $controller->$actionName ($param);
+}
 else
-    {
-        errorPage404();
-    }
+{
+   errorPage404();
+}
 
 function errorPage404()
 {

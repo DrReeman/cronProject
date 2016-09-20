@@ -7,7 +7,8 @@ use Model\Environment;
 use Model\CronConfig;
 use Connection\DBConnection;
 
-class Controller {
+class Controller
+{
 
     private function setConnection()
     {
@@ -26,7 +27,7 @@ class Controller {
 
         foreach ($sourcesList as $value)
         {
-            $source[] = $environment->getSourcesConfigContent( $value );
+            $source[] = $environment->getSourcesConfigContent($value);
         }
 
         $data['envList'] = $envList;
@@ -55,8 +56,9 @@ class Controller {
 
         $source = array();
 
-        foreach ($currentConfig as $value) {
-            $source[] = $cronConfig->getCurrentConfigContent( $value );
+        foreach ($currentConfig as $value)
+        {
+            $source[] = $cronConfig->getCurrentConfigContent($value);
         }
 
         $data['content'] = $source;
@@ -84,11 +86,12 @@ class Controller {
         );
     }
 */
-    public function addRowAction( $args )
+    public function addRowAction($args)
     {
         $cronConfig = new CronConfig();
-        $data['content'] = $cronConfig->addRowToFile( $args );
-        if( false !== $data['content'] ) {
+        $data['content'] = $cronConfig->addRowToFile($args);
+        if (false !== $data['content'])
+        {
             $view = new View();
             $view->renderPartial(
                 'addrow',
@@ -97,7 +100,7 @@ class Controller {
         }
     }
 
-    public function saveFileAction( $args )
+    public function saveFileAction($args)
     {
         $cronConfig = new CronConfig();
         $cronConfig->save($args);
@@ -116,10 +119,10 @@ class Controller {
         $cronConfig->editRowInFile( $args );
     }
 */
-    public function removeConfigAction( $args )
+    public function removeConfigAction($args)
     {
         $cronConfig = new CronConfig();
-        $cronConfig->removeConfig( $args );
+        $cronConfig->removeConfig($args);
     }
 /*
     public function killAction( $args )

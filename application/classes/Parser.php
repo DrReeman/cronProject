@@ -9,7 +9,8 @@
 namespace Parser;
 
 
-class Parser {
+class Parser
+{
 
     private static $keyword = array(
         'minute',
@@ -22,8 +23,10 @@ class Parser {
 
     );
 
-    static function delEmpty($arr) {
-        foreach ($arr as $str) {
+    static function delEmpty($arr)
+    {
+        foreach ($arr as $str)
+        {
             $newArr[] = rtrim($str);
         }
 
@@ -31,23 +34,28 @@ class Parser {
         return $newArr;
     }
 
-    static function getContent( $fileContent ) {
+    static function getContent($fileContent)
+    {
 
-        $environmentVariables = preg_grep( '/(?(?=(^([\*]*?(\/\d)*?([\d])*?\s){5}))^$|^.*$)/', $fileContent );
-        $rows = preg_grep( '/^([\*]*?(\/\d)*?([\d])*?\s){5}/', $fileContent );
+        $environmentVariables = preg_grep('/(?(?=(^([\*]*?(\/\d)*?([\d])*?\s){5}))^$|^.*$)/', $fileContent);
+        $rows = preg_grep('/^([\*]*?(\/\d)*?([\d])*?\s){5}/', $fileContent);
 
         $rows = self::delEmpty($rows);
         $environmentVariables = self::delEmpty($environmentVariables);
 
-        foreach ( $rows as $index => $row ) {
-            $explodeRow[$index] = preg_split( '/[\s]+/', $row, 7 );
+        foreach ($rows as $index => $row)
+        {
+            $explodeRow[$index] = preg_split('/[\s]+/', $row, 7);
         }
 
-        if(!empty($explodeRow)) {
+        if(!empty($explodeRow))
+        {
             foreach ($explodeRow as $index => $rowElement) {
-                $cronCommands[$index] = array_combine( self::$keyword, $rowElement );
+                $cronCommands[$index] = array_combine(self::$keyword, $rowElement);
             }
-        } else {
+        }
+        else
+        {
             $cronCommands = "";
         }
 
@@ -57,19 +65,21 @@ class Parser {
         return $newFileContent;
     }
 
-    static function newFileRows( $sshConnection, $filePath, $rowGroup ) {
+    static function newFileRows($sshConnection, $filePath, $rowGroup) {
         $fileContent = file($filePath);
-        $rowsTiming = preg_grep( '/^([\*]*?(\/\d)*?\s){5}/', $fileContent );
-        $rowsNotTiming = preg_grep( '/(?(?=(^([\*]*?(\/\d)*?\s){5}))^$|^.*$)/', $fileContent );
+        $rowsTiming = preg_grep('/^([\*]*?(\/\d)*?\s){5}/', $fileContent);
+        $rowsNotTiming = preg_grep('/(?(?=(^([\*]*?(\/\d)*?\s){5}))^$|^.*$)/', $fileContent);
         $newFileRows = array();
-        foreach ( $rowGroup as $value ) {
-            if ( array_key_exists( $value, $rowsTiming ) ) {
+        foreach ($rowGroup as $value)
+        {
+            if (array_key_exists($value, $rowsTiming))
+            {
                 $newFileRows[$value] = $rowsTiming[$value];
             }
         }
 
         $newFileRows += $rowsNotTiming;
-        ksort( $newFileRows );
+        ksort($newFileRows);
 
         return $newFileRows;
        // echo "<pre>";

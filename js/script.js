@@ -5,7 +5,6 @@ $(document).ready(function(){
         collapsible:true
     });
     $('#createFile').bind('click', createNewFile);
-    //$('.addFullConfig').bind('click', addRowGroup);
     $('.addRowButton').bind('click', addRow);
     $('#environmentList').bind('change', changeEnvList);
 
@@ -17,9 +16,12 @@ $(document).ready(function(){
 
         var userFunction = function(response){
 
-            if( $('#environmentList').children(':selected').data('id') == 0 ) {
+            if( $('#environmentList').children(':selected').data('id') == 0 )
+            {
                 $('#createFile').prop("disabled", "disabled");
-            } else {
+            }
+            else
+            {
                 $('#createFile').prop("disabled", false);
             }
 
@@ -37,7 +39,7 @@ $(document).ready(function(){
 
             $('.saveButton').bind('click', saveFile);
             $('.deleteButton').bind('click', deleteConfig);
-            //$('.delRowButton').bind('click', delRow);
+            $('.delRowButton').bind('click', delRow);
             $('td').bind('click', cellClick);
         };
         var action = 'getCurrentConfig';
@@ -47,7 +49,8 @@ $(document).ready(function(){
 
     function reInitAccordion(accordionId, response, initParams)
     {
-        if( $(accordionId).accordion('instance') ) {
+        if($(accordionId).accordion('instance'))
+        {
             $(accordionId).accordion('destroy');
         }
         $(accordionId)
@@ -58,21 +61,22 @@ $(document).ready(function(){
 
     function activeAccordionContent(tableClass)
     {
-        var tableCronCommands = $('#accordionCurrent')
-            .find('[aria-hidden="false"]')
-            .find('.'+tableClass);
+         var rowData = {};
+         $('#accordionCurrent')
+             .find('[aria-hidden="false"]')
+             .find('.'+tableClass)
+             .children()
+             .children('[data-type="tableContent"]')
+             .not('[data-delete="true"]')
+             .each(function(i) {
+             rowData[i] =  $.map(
+                    $(this).children('[data-type="editable"]'),
+                    function(a) {
+                        return $(a).text().trim();
+                    });
+         });
 
-        var rowsCronCommands = tableCronCommands.children().children('[data-type=tableContent]');
-        var rowsObj = {};
-        for (var i = 0; i < rowsCronCommands.length; i++) {
-            var rowData = [];
-            var td = $(rowsCronCommands[i]).children('[data-type=editable]');
-            for (var j = 0; j < td.length; j++) {
-                rowData.push($(td[j]).text().trim());
-            }
-            rowsObj[i] = rowData;
-        }
-        return rowsObj;
+        return rowData;
     }
 
     function addRow()
@@ -81,23 +85,31 @@ $(document).ready(function(){
         var envVar = getEnvironmentVariables(this)
         var cronTiming = getCronTiming(this);
         var action = 'addRow';
-
-        var userFunction = function(response){
+        var userFunction = function(response)
+        {
             var table = $('#accordionCurrent')
                 .find('[aria-hidden="false"]')
                 .find('.'+data.tableClass);
-            var emptyRow = table.children().children('[data-new-row="newEmptyRow"]');
+            var emptyRow = table
+                .children()
+                .children('[data-new-row="newEmptyRow"]');
 
-            if ( emptyRow.length != 0 ) {
+            if ( emptyRow.length != 0 )
+            {
                 emptyRow.before(response);
-            } else {
+            }
+            else
+            {
                 table.append(response);
             }
         };
 
-        if(data.tableClass == 'envVars') {
+        if (data.tableClass == 'envVars')
+        {
             var dataContent = envVar;
-        } else {
+        }
+        else
+        {
             dataContent = cronTiming;
         }
 
@@ -106,114 +118,102 @@ $(document).ready(function(){
             "data":dataContent
         };
 
-        if (undefined === data.currentConfigName) {
+        if (undefined === data.currentConfigName)
+        {
             alert('Файл не определен!');
-        } else {
-            sendData(action, param, userFunction);
         }
+        else
+        {
+            sendData(action, param, userFunction);
+            //$('td').bind('click', cellClick);
+        }
+
+
     }
-/*
+
     function delRow()
     {
-        var data = getData(this);
-        var action = 'delRow';
-        var userFunction = function(response) {
-            $('#message').html(response);
-        };
-        var param = {
-            "currentConfigName":data.currentConfigName,
-            "rowIndex":data.rowIndex
 
-        };
-        if (undefined === data.currentConfigName) {
-            alert('Файл не определен!');
-        } else {
-            sendData(action, param, userFunction);
-        }
+        $(this)
+            .closest('tr')
+            .attr('data-delete', 'true')
+            .css('background-color', 'grey')
+            .prop('disabled', 'disabled');
     }
 
-    function changeRow()
-    {
-        var data = getData(this);
-        var cronTiming = getCronTiming(this);
-        var action = 'editRow';
-        var userFunction = function(response) {
-            $('#message').html(response);
-        };
-        var param = {
-            "currentConfigName":data.currentConfigName,
-            "environVars":evironVars
-            "cronTiming":cronTiming
-
-        };
-        if (undefined === data.currentConfigName) {
-            alert('Файл не определен!');
-        } else {
-            sendData(action, param, userFunction);
-        }
-    }
-*/
 
     function saveFile()
     {
 
         var environVarsConfig = activeAccordionContent('envVars');
         var cronCommandsConfig = activeAccordionContent('cronCommands');
+        var activeCurrentConfig = $('#accordionCurrent').find("[aria-hidden='false']");
+
+        var currentConfigName = activeCurrentConfig.find('#fileName').data('configName');
 
         var action = 'saveFile';
-        var userFunction = function(response) {
+
+        var userFunction = function(response)
+        {
             $('#message').html(response);
         };
-        var activeCurrentConfig = $('#accordionCurrent').find("[aria-hidden='false']");
-        var currentConfigName = activeCurrentConfig.find('#fileName').data('configName');
-        if (currentConfigName == "new file") {
-            if( $('#fileName').val() ) {
-                currentConfigName = $('#fileName').val();
-            } else {
-                alert('Имя файла не задано!');
-                    return;
-            }
 
+        if (currentConfigName == "newFile")
+        {
+            if ($('#fileName').val())
+            {
+                currentConfigName = $('#fileName').val();
+            }
+            else
+            {
+                alert('Имя файла не задано!');
+                return;
+            }
         }
+
         var param = {
             "currentConfigName":currentConfigName,
             "environVarsConfig":environVarsConfig,
             "cronCommandsConfig":cronCommandsConfig
         };
 
-        if (undefined === currentConfigName) {
+        if (undefined === currentConfigName)
+        {
             alert('Файл не определен!');
-        } else {
+        }
+        else
+        {
             sendData(action, param, userFunction);
         }
+
     }
 
     function createNewFile()
     {
-
-
         var action = 'createNewFile';
         var param = {};
-
-        var userFunction = function(response){
-
-            if( $('#accordionCurrent').accordion('instance') ) {
-                $('#accordionCurrent').accordion('destroy');
-                var data = $('#accordionCurrent').html();
-                response += data;
-            }
-
+        var userFunction = function(response)
+        {
             var  initAccordionParam = {
                 'active': 0,
                 'collapsible':true,
                 'heightStyle': "content"
             };
 
+            if ($('#accordionCurrent').accordion('instance'))
+            {
+                $('#accordionCurrent').accordion('destroy');
+                var data = $('#accordionCurrent').html();
+                response += data;
+            }
+
             reInitAccordion('#accordionCurrent', response, initAccordionParam);
 
             $('.saveButton').bind('click', saveFile);
             $('.deleteButton').bind('click', deleteConfig);
-            if( $('#accordionCurrent').find('h3').filter('[data-new="true"]').length != 0 ){
+
+            if ($('#accordionCurrent').find('h3').filter('[data-new="true"]').length != 0)
+            {
                 $('#createFile').prop('disabled', true);
             }
         };
@@ -224,16 +224,21 @@ $(document).ready(function(){
     function deleteConfig()
     {
         var action = 'removeConfig';
-        var activeCurrentConfig = $('#accordionCurrent').find("[aria-hidden='false']");
-        var currentConfigName = activeCurrentConfig.find('#fileName').data('configName');
+        var activeCurrentConfig = $('#accordionCurrent')
+            .find("[aria-hidden='false']");
+        var currentConfigName = activeCurrentConfig
+            .find('#fileName')
+            .data('configName');
         var param = {
             "currentConfigName":currentConfigName
         };
-        var userFunction = function(response) {
+        var userFunction = function(response)
+        {
             $('#message').html(response);
         };
         sendData(action, param, userFunction);
     }
+
 /*
     function addRowGroup()
     {
@@ -263,37 +268,53 @@ $(document).ready(function(){
         }
     }
 */
+
     function cellClick()
     {
-        if ($(this).data('type') == 'editable') {
-
-
-
-            $(this).prop('contenteditable', 'true').focus();
-            $(this).parent().css('background-color', '#7eacd7');
-            var tdContent = $(this).text();
-            //console.log(tr);
+        if ($(this).data('type') == 'editable')
+        {
+            $(this)
+                .prop('contenteditable', 'true')
+                .focus();
+            $(this)
+                .parent()
+                .css('background-color', '#7eacd7');
+            var tdContent = $(this)
+                .text();
             $(this).focusout(function(){
-                $(this).prop('contenteditable', 'false');
-                $(this).parent().css('background-color', '#D8E6F3');
-                if (tdContent.localeCompare( $(this).text() ) != 0 ) {
-                    $(this).parent().css('background-color', 'green');
+                $(this)
+                    .prop('contenteditable', 'false');
+                $(this)
+                    .parent()
+                    .css('background-color', '#D8E6F3');
+                if (tdContent.localeCompare( $(this).text() ) != 0)
+                {
+                    $(this)
+                        .parent()
+                        .css('background-color', 'green');
                 }
             });
         }
     }
 
-
-
     function getData(button)
     {
-        var rowIndex = $('#'+button.id).data('rowIndex');
-        var environmentId = $('#environmentList option:selected').data('id');
-        var activeCurrentConfig = $('#accordionCurrent').find("[aria-hidden='false']");
-        var currentConfigName = activeCurrentConfig.find('#fileName').data('configName');
-        var activeSourceConfig = $('#accordionSource').find("[aria-hidden='false']");
-        var sourceConfigId = activeSourceConfig.find('#fileName').data('configId');
-        var tableClass = $(button).data('tableClass');
+        var rowIndex = $('#'+button.id)
+            .data('rowIndex');
+        var environmentId = $('#environmentList option:selected')
+            .data('id');
+        var activeCurrentConfig = $('#accordionCurrent')
+            .find("[aria-hidden='false']");
+        var activeSourceConfig = $('#accordionSource')
+            .find("[aria-hidden='false']");
+        var currentConfigName = activeCurrentConfig
+            .find('#fileName')
+            .data('configName');
+        var sourceConfigId = activeSourceConfig
+            .find('#fileName')
+            .data('configId');
+        var tableClass = $(button)
+            .data('tableClass');
         var object = {
             "rowIndex":rowIndex,
             "environmentId":environmentId,
@@ -306,69 +327,42 @@ $(document).ready(function(){
 
     function getCronTiming(button)
     {
-        var row = $('#'+button.id)
-            .parent()
-            .parent()
-            .parent();
-        var minute = row
-            .find(':nth-child(1)')
-            .text()
-            .trim();
-        var hour = row
-            .find(':nth-child(2)')
-            .text()
-            .trim();
-        var day = row
-            .find(':nth-child(3)')
-            .text()
-            .trim();
-        var month = row
-            .find(':nth-child(4)')
-            .text()
-            .trim();
-        var weekday = row
-            .find(':nth-child(5)')
-            .text()
-            .trim();
-        var owner = row
-            .find(':nth-child(6)')
-            .text()
-            .trim();
-        var command = row
-            .find(':nth-child(7)')
-            .text()
-            .trim();
+        var tdText = [];
+        $('#'+button.id)
+            .closest('tr')
+            .children('[data-type="content"]')
+            .each(function(i) {
+                tdText[i] = $(this)
+                    .text()
+                    .trim();
+            });
 
         var cronTiming = {
-            "minute":minute,
-            "hour":hour,
-            "day":day,
-            "month":month,
-            "weekday":weekday,
-            "owner":owner,
-            "command":command
+            "minute":tdText[0],
+            "hour":tdText[1],
+            "day":tdText[2],
+            "month":tdText[3],
+            "weekday":tdText[4],
+            "owner":tdText[5],
+            "command":tdText[6]
         };
 
         return cronTiming;
     }
 
-    function getEnvironmentVariables( button )
+    function getEnvironmentVariables(button)
     {
-        var row = $('#'+button.id)
-            .parent()
-            .parent()
-            .parent();
-        var envVar = row
-            .find(':nth-child(1)')
-            .text()
-            .trim();
-        var evironmentVars = {
-            "envVar":envVar
-        }
-        return evironmentVars;
+        return {
+            "envVar":
+                $('#'+button.id)
+                    .closest('tr')
+                    .find(':first-child')
+                    .text()
+                    .trim()
+        };
     }
 
-    function sendData( action, param, func )
+    function sendData(action, param, func)
     {
         $.ajax({
             type: "POST",
