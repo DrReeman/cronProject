@@ -25,6 +25,7 @@ class Environment
         $sth->execute();
 
         $this->environmentList = $sth->fetchAll(PDO::FETCH_ASSOC);
+
         return $this->environmentList;
     }
 
@@ -35,6 +36,7 @@ class Environment
         $sth = $this->connection->prepare($SourceQuery);
         $sth->execute();
         $this->configs = $sth->fetchALL(PDO::FETCH_ASSOC);
+
         return $this->configs;
     }
 
@@ -43,11 +45,11 @@ class Environment
         $filename = $args['configName'] . '.' . $args['configExtension'];
         $fullDirectory = $args['directory'] . $filename;
         $fileContent = file($fullDirectory);
-        //echo $fullDirectory;
         $configContent = Parser::getContent($fileContent);
         $source['sourceName'] = $filename;
         $source['configId'] = $args['configId'];
         $source['sourceContent'] = $configContent;
+
         return $source;
     }
 
@@ -61,6 +63,7 @@ class Environment
         $sth->bindParam(':confId', $args['sourceConfigId'], PDO::PARAM_STR);
         $sth->execute();
         $filename = $sth->fetch(PDO::FETCH_ASSOC);
+
         return $filename['directory'] . $filename['configName'] . '.' . $filename['configExtension'];
     }
 }

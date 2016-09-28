@@ -7,6 +7,7 @@ use Model\Environment;
 use Model\CronConfig;
 use Connection\DBConnection;
 
+
 class Controller
 {
 
@@ -48,6 +49,9 @@ class Controller
         );
     }
 
+
+
+
     public function getCurrentConfigAction()
     {
 
@@ -63,6 +67,7 @@ class Controller
 
         $data['content'] = $source;
         $view = new View();
+
         $view->renderPartial(
             'conf',
             $data
@@ -124,14 +129,18 @@ class Controller
         $cronConfig = new CronConfig();
         $cronConfig->removeConfig($args);
     }
+
+
+
 /*
     public function killAction( $args )
     {
     }
-
+*/
     public function runAction( $args )
     {
+
     }
 
-*/
+
 }

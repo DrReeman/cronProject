@@ -2,7 +2,10 @@
 <?php foreach($content as $file): ?>
 
 
-        <h3><?php echo $file['configName']; ?></h3>
+        <h3>
+            <?php echo $file['configName']; ?>
+            <?php echo ($file['activeCrond']==true) ? ' (активный)' : ' (неакивный)'; ?>
+        </h3>
         <div class = "fileContent">
             <label><input type = "text" id = "fileName" data-config-name = "<?php echo $file['configName']; ?>" hidden = "hidden" ></label>
             <label><input class = "deleteButton" type = "button" value = "Delete"></label>
