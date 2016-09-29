@@ -40,7 +40,7 @@
                 </tr>
                 <?php if ( !empty( $file['configContent']['cronCommands'] ) ) : ?>
                     <?php $n = 0; foreach ($file['configContent']['cronCommands'] as $index => $row): ?>
-                        <tr data-type = "tableContent" data-delete = "false" data-row-index = "<?php echo $index; ?>">
+                        <tr data-index = "<?php echo $index; ?>" data-flag = "<?php echo $file['configContent']['flags'][$index] ?>" data-type = "tableContent" data-delete = "false" data-row-index = "<?php echo $index; ?>">
                             <?php foreach ($row as $rowElement): ?>
                                 <td data-type = 'editable'>
                                     <?php echo $rowElement; ?>

@@ -8,16 +8,16 @@ use Connection\SSHConnection;
 class CronConfig
 {
 
-       private $host = '192.168.215.227';
-       private $port = 22;
-       private $userName = 'developer';
-       private $userPass = 'developer';
+       //private $host = 'trade-system-86630-86565-fabrikant.h.dev.ftest';
+      // private $port = 22;
+       //private $userName = 'developer';
+       //private $userPass = 'developer';
 
 
-    //private $host = '192.168.191.221';
-    //private $port = 22;
-    //private $userName = 'root';
-    //private $userPass = 'reemanintegral1994';
+    private $host = 'localhost';
+    private $port = 22;
+    private $userName = 'root';
+    private $userPass = 'reemanintegral1994';
 
     public function getCurrentConfigList() {
         $connection = new SSHConnection($this->host, $this->port, $this->userName, $this->userPass);

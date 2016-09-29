@@ -77,7 +77,7 @@ class SSHConnection
 
 
     public function checkCrond() {
-        $command = 'echo `ps aux | grep -F "/usr/sbin/crond" | grep -v -F "grep" | awk \'{ print $2 }\'`';
+        $command = 'echo `ps aux | grep -F "crond" | grep -v -F "grep" | awk \'{ print $2 }\'`';
         $stream = ssh2_exec($this->connection, $command);
         stream_set_blocking($stream, true);
         $stream_out = ssh2_fetch_stream($stream, SSH2_STREAM_STDIO);

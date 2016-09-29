@@ -37,6 +37,8 @@ $(document).ready(function(){
                 initAccordionParam
             );
 
+
+
             $('.saveButton').bind('click', saveFile);
             $('.deleteButton').bind('click', deleteConfig);
             $('.delRowButton').bind('click', delRow);
@@ -56,7 +58,12 @@ $(document).ready(function(){
         $(accordionId)
             .empty()
             .append(response)
-            .accordion(initParams);
+            .accordion(initParams)
+            .find('.cronCommands')
+            .children()
+            .children('[data-flag="inactiveCronCommand"]')
+            .css('background-color', 'grey');
+
     }
 
     function activeAccordionContent(tableClass)
